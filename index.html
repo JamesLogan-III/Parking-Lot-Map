@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>IPM Garage Map and Info</title>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<header>
+			<img src="images/logo.png" />
+		</header>
+		<article>
+			<div id="map"></div>
+			<div id="search-container">
+				<div id="search-nav">
+					<input data-bind="value: searchFilter, valueUpdate: 'afterkeydown'" placeholder="Filter" autocomplete="on" />
+					<button data-bind="click: resetFilter">Reset Filter</button>
+					<div id="scroller">
+                        <div>
+                            <div data-bind="template: { name: 'lot' , foreach: filterLots, as: 'lot' }"></div>
+                            <script type="text/html" id="lot">
+                                <div data-bind="visible: visible">
+                                <a href="#" data-bind="attr: {id: id}, click: $parent.showLot.bind($data)">
+                                    <strong data-bind="text: lot.name"></strong>
+                                </a>
+                                </div>
+                            </script>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</article>
+		<footer>
+			<p>International Parking Management | 505 5th Avenue South, Suite P1 Seattle, WA 98104 | P: 206.254.0811 | E: <a href="mailto:Info@IPMSeattle.com">Info@IPMSeattle.com</a></p>
+		</footer>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+		<!-- script type="text/javascript" src="js/lib/knockout.mapping-latest.js"></script -->
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTva_fKidJdfJRqgbkx6M4Isx4rm6L-KQ"></script>
+		<script type="text/javascript" src="js/lots.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+
+	</body>
+</html>
