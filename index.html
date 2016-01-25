@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>IPM Garage Map and Info</title>
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="icon" type="image/png" href="images/favicon.ico">
 	</head>
 	<body>
 		<header>
@@ -14,7 +15,7 @@
 			<div id="map"></div>
 			<div id="search-container">
 				<div id="search-nav">
-					<input data-bind="value: searchFilter, valueUpdate: 'afterkeydown'" placeholder="Filter" autocomplete="on" />
+					<input data-bind="value: searchFilter, valueUpdate: 'afterkeydown'" placeholder="Filter Lots" autocomplete="on" id="searchFilter" />
 					<div id="scroller">
 						<div>
 							<div data-bind="template: { name: 'lot' , foreach: filterLots, as: 'lot' }"></div>
