@@ -6,6 +6,11 @@ This is map of all IPM Parking venues in the greater Seattle Area with street vi
 
 * [International Parking Management](http://www.ipmseattle.com/)
 
+## Installation Instructions
+
+* [View the Map on Github](http://jameslogan-iii.github.io/FED-P-5/index.html) or
+* Check out the code and open the index.html file.
+
 ## Sites/Tools Used
 
 ### Tools
