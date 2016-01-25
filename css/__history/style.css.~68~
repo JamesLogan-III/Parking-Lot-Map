@@ -34,8 +34,8 @@ article {
 	position: absolute;
 	width: 370px;
 	height: 25px;
-	bottom: 10px;
-	right: 16px;
+	bottom: 3px;
+	/*right: 16px;*/
 	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
 	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
 	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
@@ -69,7 +69,7 @@ article {
 .hourly {
 	color:  #FF9C00;
 	list-style: none;
-	font-weight: bold;
+	min-width: 30%;
 	width: 35%;
 }
 
@@ -78,14 +78,14 @@ article {
 }
 
 .ratesTable {
-	list-style: none;
+	list-style: none;	
 }
 
 .rate {
 	color:  #4D4D4D;;
 	list-style: none;
-	font-weight: bold;
 	width: 35%;
+	margin-left: 20px;
 }
 
 

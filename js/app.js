@@ -1,9 +1,6 @@
 	'use strict';
-	//var map;
-	//var streetViewURL;
 	var streetViewRoot = 'https://maps.googleapis.com/maps/api/streetview?size=370x150&location=';
 	var streetViewHeading = '&heading=';
-
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
@@ -33,7 +30,6 @@
 		infoWindow: new google.maps.InfoWindow(),
 		infoWindowContent: '',
 		initMap: function(vm) {
-			console.log("Init ViewModel line 36");
 			googleMap.map = new google.maps.Map(document.getElementById('map'), googleMap.options);
 			if (vm.initalized && !vm.markersLoaded) {
 				vm.showMarkers();
@@ -63,6 +59,7 @@
 		this.visible = ko.observable(lotData.visible);
 		this.events = ko.observable(lotData.events);
 		this.notes = ko.observable(lotData.notes);
+		this.show = true;
 
 		this.lotInfo = '';
 		// Build content for the infoWindow popup
@@ -92,14 +89,12 @@
 		this.lotinfoHTML += '<div class="iw-bottom-gradient"></div></div>';
 		this.lotinfoHTML = ko.observable(this.lotinfoHTML);
 
-		//$('body').append(this.lotinfoHTML());
-
 		// Is loaded flag
 		this.initialized = ko.observable(false);
 
 		var lotMarker = new google.maps.Marker({
 			position: new google.maps.LatLng(this.lat(), this.long()),
-			title: lotData.lotName //this.name()
+			title: lotData.lotName
 		});
 
 		google.maps.event.addListener(lotMarker, 'click', (function(lot, parent) {
@@ -120,10 +115,7 @@
 		self.markersLoaded = false;
 		self.lotList = ko.observableArray([]);
 
-
-
 		self.init = function() {
-
 			//load lots
 			lots.forEach(function(lot) {
 				self.lotList.push(new Lot(lot, self));
@@ -145,7 +137,7 @@
 
 		self.showMarkers = function() {
 			ko.utils.arrayForEach(self.lotList(), function(lot) {
-				if (lot.visible()) {
+				if (lot.show) {
 					lot.lotMarker.setMap(googleMap.map);
 				} else {
 					lot.lotMarker.setMap(null);
@@ -156,34 +148,19 @@
 
 		// a second KO array to handle searches
 		self.filterLots = ko.computed(function(){
+
 			var filter = self.searchFilter().toLowerCase();
-			console.log("searchFilter = " + filter);
-			if(self.searchFilter().length == 0 ) {
-				return self.lotList();
-			}
-			else { return ko.utils.arrayFilter(self.filterLots(), function(lot){
-				if (lot.name().toLowerCase().indexOf(filter) !== -1) {
-					lot.visible(true);
-					lot.lotMarker.setMap(googleMap.map);
-					return lot.name().toLowerCase().indexOf(filter) !== -1;
+			return ko.utils.arrayFilter(self.lotList(), function(lot){
+				if (lot.name().toLowerCase().indexOf(filter) >= 0) {
+					lot.show = true;
+					return lot.visible(true);
 				} else {
-					lot.visible(false);
-					showMarkers();
+					lot.show = false;
+					self.showMarkers();
 					return lot.visible(false);
-					//lot.lotMarker.setMap(null);
-					//lot.lotMarker = null;
 				}
 			});
-		}
 		}, ViewModel);
-
-		// Reset button blanks the filter and call init function again
-		self.resetFilter = function() {
-			self.filterLots() =
-			self.init();
-		};
-
-
 	};
 
 	var vm = new ViewModel();
@@ -193,6 +170,7 @@
 		ko.applyBindings(vm);
 	});
 
+	// redraw the markers on filter field Keyup
 	$("input").keyup(function() {
 	    vm.showMarkers();
 	});
@@ -206,41 +184,40 @@
 	 * are applied.
 	 */
 	google.maps.event.addListener(googleMap.infoWindow, 'domready', function() {
+		// Reference to the DIV which receives the contents of the infowindow using jQuery
+		var iwOuter = $('.gm-style-iw');
 
-	   // Reference to the DIV which receives the contents of the infowindow using jQuery
-	   var iwOuter = $('.gm-style-iw');
+		/* The DIV we want to change is above the .gm-style-iw DIV.
+		* So, we use jQuery and create a iwBackground variable,
+		* and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+		*/
+		var iwBackground = iwOuter.prev();
 
-	   /* The DIV we want to change is above the .gm-style-iw DIV.
-	    * So, we use jQuery and create a iwBackground variable,
-	    * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
-	    */
-	   var iwBackground = iwOuter.prev();
+		// Remove the background shadow DIV
+		iwBackground.children(':nth-child(2)').css({'display' : 'none'});
 
-	   // Remove the background shadow DIV
-	   iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+		// Remove the white background DIV
+		iwBackground.children(':nth-child(4)').css({'display' : 'none'});
 
-	   // Remove the white background DIV
-	   iwBackground.children(':nth-child(4)').css({'display' : 'none'});
-
-	   var iwCloseBtn = iwOuter.next();
+		var iwCloseBtn = iwOuter.next();
 
 		// Apply the desired effect to the close button
 		iwCloseBtn.css({
-		  opacity: '1', // by default the close button has an opacity of 0.7
-		  right: '12px', top: '3px', // button repositioning
-		  border: '7px solid #FF9C00', // increasing button border and new color
-		  'border-radius': '13px', // circular effect
-		  'box-shadow': '0 0 5px #3990B9' // 3D effect to highlight the button
-		  });
+			opacity: '1', // by default the close button has an opacity of 0.7
+			right: '12px', top: '3px', // button repositioning
+			border: '7px solid #FF9C00', // increasing button border and new color
+			'border-radius': '13px', // circular effect
+			'box-shadow': '0 0 5px #3990B9' // 3D effect to highlight the button
+		});
 
 		// If the content of infowindow not exceed the set maximum height, then the gradient is removed.
-	    if($('.infoWindow').height() < 640){
-	      $('.iw-bottom-gradient').css({display: 'none'});
-	    }
+		if($('.infoWindow').height() < 640){
+			$('.iw-bottom-gradient').css({display: 'none'});
+		}
 
 		// The API automatically applies 0.7 opacity to the button after the mouseout event.
 		// This function reverses this event to the desired value.
 		iwCloseBtn.mouseout(function(){
-		  $(this).css({opacity: '1'});
+			$(this).css({opacity: '1'});
 		});
 	});
