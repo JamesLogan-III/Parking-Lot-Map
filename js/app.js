@@ -94,8 +94,10 @@
 
 		var lotMarker = new google.maps.Marker({
 			position: new google.maps.LatLng(this.lat(), this.long()),
+			animation: google.maps.Animation.DROP,
 			title: lotData.lotName
 		});
+
 
 		google.maps.event.addListener(lotMarker, 'click', (function(lot, parent) {
 			return function() {
@@ -129,10 +131,14 @@
 		};
 
 		self.showLot = function(lot) {
-			//set content of infoWindow, show it and center the map
+			//set content of infoWindow, show it and center the map, make it bounce for 2 seconds
 			googleMap.infoWindow.setContent(lot.lotinfoHTML());
+			lot.lotMarker.setAnimation(google.maps.Animation.BOUNCE);
 			googleMap.infoWindow.open(googleMap.map, lot.lotMarker);
 			googleMap.map.setCenter(lot.lotMarker.getPosition());
+			window.setTimeout(function() {
+				lot.lotMarker.setAnimation(null);
+			}, 2000);
 		};
 
 		self.showMarkers = function() {
