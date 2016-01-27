@@ -95,7 +95,8 @@
 		var lotMarker = new google.maps.Marker({
 			position: new google.maps.LatLng(this.lat(), this.long()),
 			animation: google.maps.Animation.DROP,
-			title: lotData.lotName
+			title: lotData.lotName,
+			icon: 'images/marker-icon-2.png'
 		});
 
 
