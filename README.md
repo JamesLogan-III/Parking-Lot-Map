@@ -9,7 +9,13 @@ This is map of all IPM Parking venues in the greater Seattle Area with street vi
 ## Installation Instructions
 
 * [View the Map on Github](http://jameslogan-iii.github.io/FED-P-5/index.html) or
-* Check out the code and open the index.html file.
+
+
+* Download or fork the code from [GitHub](https://github.com/JamesLogan-III/FED-P-5)
+* Open the index.html file to start the application
+* Use the filter box on the right side to list and search for individual lot information
+* Select a map marker or list item name to display the lot information
+
 
 ## Sites/Tools Used
 
@@ -34,3 +40,4 @@ This is map of all IPM Parking venues in the greater Seattle Area with street vi
 * https://www.devbridge.com/articles/knockout-a-real-world-example/
 * https://developers.google.com/maps/documentation/javascript/
 * https://developers.google.com/maps/documentation/javascript/controls
+* https://builtvisible.com/setting-local-fallback-jquery-served-via-cdn/

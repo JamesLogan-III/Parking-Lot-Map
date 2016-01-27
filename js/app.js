@@ -64,28 +64,28 @@
 		this.lotInfo = '';
 		// Build content for the infoWindow popup
 		this.lotinfoHTML = '<div class="infoWindow"><h4 class="infoWindowTitle">'+ this.name() + '<br/><span>' + this.address()[0] + '</span>';
-		if (!this.manager() == "") this.lotinfoHTML += '<span style="float: right;">Manager:<br />' + this.manager() + '</span>';
+		if (this.manager() !== "") this.lotinfoHTML += '<span style="float: right;">Manager:<br />' + this.manager() + '</span>';
 		this.lotinfoHTML += '</h4>';
 		this.lotinfoHTML += '<img src="' + streetViewRoot + this.lat() + ',' + this.long() + streetViewHeading + this.svHeading() +'" />';
 		this.lotinfoHTML += '<strong>Details:</strong><ul>';
 		this.lotinfoHTML += '<li><span class="bulletLabel">Cross Streets:</span> ' + this.crossStreets() + '</li>';
-		if (!this.garageHeight() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Height:</span> ' + this.garageHeight() + '</li>';
-		if (!this.stalls() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Stalls:</span> ' + this.stalls() + '</li>';
-		if (!this.attendant() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Attendant:</span> ' + this.attendant() + '</li>';
-		if (!this.hours() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Hours:</span> ' + this.hours() + '</li>';
-		this.lotinfoHTML += '</ul>'
+		if (this.garageHeight() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Height:</span> ' + this.garageHeight() + '</li>';
+		if (this.stalls() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Stalls:</span> ' + this.stalls() + '</li>';
+		if (this.attendant() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Attendant:</span> ' + this.attendant() + '</li>';
+		if (this.hours() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Hours:</span> ' + this.hours() + '</li>';
+		this.lotinfoHTML += '</ul>';
 		if (this.taxIncluded()) {
 			this.lotinfoHTML += '<strong>Taxes Included</strong><br />';
 		} else {
 			this.lotinfoHTML += '<strong>Taxes Not Included</strong><br />';
 		}
 		this.lotinfoHTML += '<strong>Rates:</strong><ul>';
-		if (!this.dailyRates() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Daily Rates:</span> ' + this.dailyRates() + '</li>';
-		if (!this.earlyBird() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Early Bird:</span> ' + this.earlyBird() + '</li>';
-		if (!this.monthlyRates() == "") this.lotinfoHTML += '<li><span class="bulletLabel">Monthly Rates:</span> ' + this.monthlyRates() + '</li>';
-		if (!this.events() == "") this.lotinfoHTML += '<li><span class="bulletLabel">' + this.events() + '</span></li>';
-		this.lotinfoHTML += '</ul>'
-		if (!this.notes() == "") this.lotinfoHTML += '<strong>Notes:</strong> <p>' + this.notes() + '</p>';
+		if (this.dailyRates() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Daily Rates:</span> ' + this.dailyRates() + '</li>';
+		if (this.earlyBird() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Early Bird:</span> ' + this.earlyBird() + '</li>';
+		if (this.monthlyRates() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Monthly Rates:</span> ' + this.monthlyRates() + '</li>';
+		if (this.events() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">' + this.events() + '</span></li>';
+		this.lotinfoHTML += '</ul>';
+		if (this.notes() !== "") this.lotinfoHTML += '<strong>Notes:</strong> <p>' + this.notes() + '</p>';
 		this.lotinfoHTML += '<div class="iw-bottom-gradient"></div></div>';
 		this.lotinfoHTML = ko.observable(this.lotinfoHTML);
 
@@ -171,12 +171,16 @@
 	});
 
 	// redraw the markers on filter field Keyup
+	// TODO swap this jQuery for a knockout binding
 	$("input").keyup(function() {
 	    vm.showMarkers();
 	});
 
 	// Initialize map on page load
 	google.maps.event.addDomListener(window, 'load', googleMap.initMap(vm));
+
+	// NOTE: the code below is used to manipulate the CSS of the Infowindow object from Google Maps, It has no impact on the use of KnockoutJS for interaction
+
 	/*
 	 * The google.maps.event.addListener() event waits for
 	 * the creation of the infowindow HTML structure 'domready'
