@@ -34,8 +34,8 @@ article {
 	position: absolute;
 	width: 370px;
 	height: 25px;
-	bottom: 10px;
-	right: 16px;
+	bottom: 3px;
+	/*right: 16px;*/
 	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
 	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
 	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
@@ -69,7 +69,7 @@ article {
 .hourly {
 	color:  #FF9C00;
 	list-style: none;
-	font-weight: bold;
+	min-width: 30%;
 	width: 35%;
 }
 
@@ -78,16 +78,15 @@ article {
 }
 
 .ratesTable {
-	list-style: none;
+	list-style: none;	
 }
 
 .rate {
 	color:  #4D4D4D;;
 	list-style: none;
-	font-weight: bold;
 	width: 35%;
+	margin-left: 20px;
 }
-
 
 .infoWindow img {
 	
@@ -108,17 +107,18 @@ article {
 #map {
 	height: 100%;
 	width: 100%;
-    z-index: 1;
-    position: absolute;
-    margin: 0;
+	z-index: 1;
+	position: absolute;
+	margin: 0;
 }
 
-#input {
-	margin: 15px 0 5px 15px;
+#search-nav input#searchFilter {
+	margin: 15px 0 5px 5px;
+	/* padding: 0 5px 0 5px; */
 	width: 83%;
 	height: 35px;
 	font-size: 17px;
-	font-family: helvetica, sans-serif;
+	/* font-family: helvetica, sans-serif; */
 	color: #4D4D4D;
 	border: none;
 	-webkit-box-shadow: 2px 2px 5px #9d9d9d;
@@ -127,26 +127,38 @@ article {
 }
 
 #search-container {
-	opacity: .65;
+	opacity: .8;
 	position: absolute;
 	z-index: 3;
 	top: 125;
+	height: 833px;
+	min-height: 833px;
 	right: 0;
 }
 
 #search-nav {
 	width: 300px;
-	min-height: 800px;
-	max-height: 800px;
-	background-color: #fff;
+	min-height: 827px;
+	max-height: 827px;
+	padding: 0 5x 0 5px;
+	background-color: #ffffff;
 	overflow: hidden;
 }
 
 #scroller {
-	min-height: 700px;
-	max-height: 700px;
-	overflow: scroll;
-	margin: 2px;
+	min-height: 833px;
+	max-height: 833px;
+	overflow: auto;
+	margin: 5px;
+}
+
+#scroller div div div a {
+	color: #FF9C00;
+	text-decoration: none;
+}
+
+#scroller div div div a:visited {
+	color: #FF9C00;
 }
 
 footer {
@@ -159,6 +171,15 @@ footer p {
 	font-size: 11px;
 	padding: 12px;
 	line-height: 14px;
+}
+
+footer p a {
+	color: #4D4D4D;
+	text-decoration: none;
+}
+
+footer p a:visited {
+	color: #4D4D4D;
 }
 
 @media screen and (max-width: 680px) {
