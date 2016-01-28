@@ -19,9 +19,11 @@ This is map of all IPM Parking venues in the greater Seattle Area with street vi
 
 ## Sites/Tools Used
 
-## APIs
+### APIs
+
 * [Google Maps](https://developers.google.com/maps/)
 * [Seattle Police Reports](https://dev.socrata.com/foundry/data.seattle.gov/y7pv-r3kh)
+* [Washington Department of Transportation Traffic Cameras](https://dev.socrata.com/foundry/data.seattle.gov/9wcw-sztr)
 
 ### Tools
 
