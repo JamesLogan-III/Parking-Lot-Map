@@ -2,9 +2,15 @@
 	var streetViewRoot = 'https://maps.googleapis.com/maps/api/streetview?size=370x150&location=';
 	var streetViewHeading = '&heading=';
 	// URL pattern : https://data.seattle.gov/resource/y7pv-r3kh.json?$where=within_circle(location,%2047.597520,%20-122.328885,%20200)&year=2015&month=12
+	// Seattle Police Department Incident Reports
 	var spdRoot = 'https://data.seattle.gov/resource/y7pv-r3kh.json?$where=within_circle(location,%20';
 	var	space = ',%20';
 	var	spdWhereStatement = '200)&year=2015&month=12';
+
+	// URL pattern : https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%2047.597520,%20-122.328885,%20500)
+	// 	Washington DOT traffic Cameras
+	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
+
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
