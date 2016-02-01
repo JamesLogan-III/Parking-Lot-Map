@@ -3,18 +3,34 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<title>IPM Garage Map and Info</title>
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="icon" type="image/png" href="images/favicon.ico">
+		<link rel="shortcut icon" href="images/favicon.ico">
+		<meta name="author" content="James Logan for International Parking Management">
 	</head>
 	<body>
 		<header>
-			<img src="images/logo.png" alt="International Parking Management"/>
+			<nav class="navbar navbar-inverse navbar-fixed-top navcont" role="navigation">
+				<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<img src="images/logo.png" alt="International Parking Management"/>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search-container">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+				</div>
+			</nav>
 		</header>
 		<article>
 			<div id="map"></div>
-			<div id="search-container">
-				<div id="search-nav">
+			<div id="search-container" class="collapse navbar-collapse">
+				<div id="search-nav" class="nav navbar-nav">
 					<input data-bind="value: searchFilter, valueUpdate: 'afterkeydown'" placeholder="Filter Lots" autocomplete="on" id="searchFilter" />
 					<div id="scroller">
 						<div>
@@ -31,11 +47,47 @@
 				</div>
 			</div>
 		</article>
+
+<!--
+			<div class="row">
+				<h3>Nearby Traffic Cameras</h3>
+					<div data-bind="template: { name: 'camera' , foreach: filterCams, as: 'camera' }"></div>
+						<script type="text/html" id="camera">
+							<div data-bind="visible: visible" class="col-md-4">
+							<a href="#" data-bind="attr: {id: id}, click: $parent.showLot.bind($data)">
+								<strong data-bind="text: camera.cameralabel"></strong>
+								<img data-bind="attr: {src: imageurl}"
+							</a>
+							</div>
+						</script>
+					</div>
+
+
+					<div class="col-md-4">
+						<a href="#">
+							<span data-bind=>5th Ave S & S Dearborn St</span><br/>
+							<img src="http://www.seattle.gov/trafficcams/images/5_Dearborn.jpg"/>
+						</a>
+					</div>
+					<div class="col-md-4">
+						<a href="http://www.seattle.gov/trafficcams/4thave_i90.htm">
+							<span>4th Ave S @ I-90 TD</span><br/>
+							<img src="http://www.seattle.gov/trafficcams/images/4thave_i90.jpg"/>
+						</a>
+					</div>
+
+			</div>
+
+-->
+
+
 		<footer>
 			<p>International Parking Management | 505 5th Avenue South, Suite P1 Seattle, WA 98104 | P: 206.254.0811 | E: <a href="mailto:Info@IPMSeattle.com">Info@IPMSeattle.com</a></p>
 		</footer>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script>(window.jQuery || document.write('<script src="js/lib/jquery-2.1.1.min.js">\x3C/script>'))</script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 		<script>(window.ko || document.write('<script src="js/lib/knockout-3.4.0.js">\x3C/script>'))</script>
 
