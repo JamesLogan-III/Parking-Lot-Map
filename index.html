@@ -51,10 +51,10 @@
 
 			<div class="row">
 				<h3>Nearby Traffic Cameras</h3>
-					<div data-bind="template: { name: 'camera' , foreach: cameraList, as: 'camera' }"></div>
+					<div data-bind="template: { name: 'camera' , foreach: currentLot.camerasList, as: 'camera' }"></div>
 						<script type="text/html" id="camera">
 							<div class="col-md-4">
-							<a href="#" data-bind="camera.webURL">
+							<a data-bind="attr : {href : camera.webURL}">
 								<h4 data-bind="text: camera.cameraLabel"></h4>
 								<img data-bind="attr: {src: camera.imageURL}"/>
 							</a>

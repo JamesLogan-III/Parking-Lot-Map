@@ -71,6 +71,7 @@
 		this.visible = ko.observable(lotData.visible);
 		this.events = ko.observable(lotData.events);
 		this.notes = ko.observable(lotData.notes);
+		this.camerasList = ko.observableArray([]);
 		this.show = true;
 
 		this.lotInfo = '';
@@ -140,14 +141,13 @@
 	          	var cameras;
 	          	console.log('gettingTrafficCameraData = '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
 	           	console.log('data = '+data);
-	           	console.log('data.status = '+data.status);
 	           	console.log('data.length = '+data.length);
 
 	           	if (data.length > 0 ) {
 	           		console.log("Got traffic Cam data");
 	           		cameras = data;
 	           		cameras.forEach(function(camera) {
-						camerasList.push(new Camera(camera, self));
+						lot.camerasList.push(new Camera(camera, self));
 					});
 	           	}
 	            self.gettingTrafficCameraData = false;
@@ -194,8 +194,7 @@
 			self.currentLot(lot);
 			console.log('call getTrafficCameras');
 			// empty the cameraList arry
-			self.cameraList.removeAll();
-
+			//self.cameraList.removeAll();
 			getTrafficCameras(lot);
 
 			window.setTimeout(function() {
@@ -229,14 +228,6 @@
 			});
 		}, ViewModel);
 
-		self.cameraList = ko.computed(function(){
-			camerasList.forEach(function(camera) {
-				self.cameraList.push(new Camera(camera, self));
-			});
-
-
-
-		},ViewModel);
 	};
 
 	var vm = new ViewModel();
