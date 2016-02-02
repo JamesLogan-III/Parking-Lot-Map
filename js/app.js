@@ -6,10 +6,12 @@
 	var spdRoot = 'https://data.seattle.gov/resource/y7pv-r3kh.json?$where=within_circle(location,%20';
 	var	space = ',%20';
 	var	spdWhereStatement = '200)&year=2015&month=12';
+	var camerasList = [];
 
 	// URL pattern : https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%2047.597520,%20-122.328885,%20500)
-	// 	Washington DOT traffic Cameras
+	// Washington DOT traffic Cameras
 	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
+	var gettingTrafficCameraData = false;
 
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
@@ -118,6 +120,47 @@
 		this.lotMarker = lotMarker;
 	};
 
+	var Camera = function(camera, parent) {
+		this.cameraLabel = ko.observable(camera.cameralabel);
+		this.imageURL = ko.observable(camera.imageurl);
+		this.webURL = ko.observable(camera.weburl);
+
+	};
+
+	var getTrafficCameras = function(lot) {
+		//alert('lot data ='+ lot.lat() + ' '+lot.long());
+
+		if (!gettingTrafficCameraData) {
+			gettingTrafficCameraData = true;
+			console.log('gettingTrafficCameraData');
+			$.ajax({
+	          dataType: "json",
+	          url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
+	          success: function(data) {
+	          	var cameras;
+	          	console.log('gettingTrafficCameraData = '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
+	           	console.log('data = '+data);
+	           	console.log('data.status = '+data.status);
+	           	console.log('data.length = '+data.length);
+
+	           	if (data.length > 0 ) {
+	           		console.log("Got traffic Cam data");
+	           		cameras = data;
+	           		cameras.forEach(function(camera) {
+						camerasList.push(new Camera(camera, self));
+					});
+	           	}
+	            self.gettingTrafficCameraData = false;
+	          },
+	          error: function() {
+	            console.log("Error getting traffic Camera data");
+	            self.gettingTrafficCameraData = false;
+	            //datastatus.errors.push("Error traffic camera data");
+	          }
+	        });
+		}
+	};
+
 	// viewModel
 	var ViewModel = function() {
 		var self = this;
@@ -127,6 +170,7 @@
 		self.initialized = false;
 		self.markersLoaded = false;
 		self.lotList = ko.observableArray([]);
+		self.cameraList = ko.observableArray([]);
 
 		self.init = function() {
 			//load lots
@@ -142,11 +186,18 @@
 		};
 
 		self.showLot = function(lot) {
-			//set content of infoWindow, show it and center the map, make it bounce for 2 seconds
+			//set content of infoWindow, show it and center the map, make it bounce for 2 seconds, set the current lot and request traffic cameras
 			googleMap.infoWindow.setContent(lot.lotinfoHTML());
 			lot.lotMarker.setAnimation(google.maps.Animation.BOUNCE);
 			googleMap.infoWindow.open(googleMap.map, lot.lotMarker);
 			googleMap.map.setCenter(lot.lotMarker.getPosition());
+			self.currentLot(lot);
+			console.log('call getTrafficCameras');
+			// empty the cameraList arry
+			self.cameraList.removeAll();
+
+			getTrafficCameras(lot);
+
 			window.setTimeout(function() {
 				lot.lotMarker.setAnimation(null);
 			}, 2000);
@@ -165,7 +216,6 @@
 
 		// a second KO array to handle searches
 		self.filterLots = ko.computed(function(){
-
 			var filter = self.searchFilter().toLowerCase();
 			return ko.utils.arrayFilter(self.lotList(), function(lot){
 				if (lot.name().toLowerCase().indexOf(filter) >= 0) {
@@ -178,6 +228,15 @@
 				}
 			});
 		}, ViewModel);
+
+		self.cameraList = ko.computed(function(){
+			camerasList.forEach(function(camera) {
+				self.cameraList.push(new Camera(camera, self));
+			});
+
+
+
+		},ViewModel);
 	};
 
 	var vm = new ViewModel();

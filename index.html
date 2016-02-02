@@ -48,21 +48,21 @@
 			</div>
 		</article>
 
-<!--
+
 			<div class="row">
 				<h3>Nearby Traffic Cameras</h3>
-					<div data-bind="template: { name: 'camera' , foreach: filterCams, as: 'camera' }"></div>
+					<div data-bind="template: { name: 'camera' , foreach: cameraList, as: 'camera' }"></div>
 						<script type="text/html" id="camera">
-							<div data-bind="visible: visible" class="col-md-4">
-							<a href="#" data-bind="attr: {id: id}, click: $parent.showLot.bind($data)">
-								<strong data-bind="text: camera.cameralabel"></strong>
-								<img data-bind="attr: {src: imageurl}"
+							<div class="col-md-4">
+							<a href="#" data-bind="camera.webURL">
+								<h4 data-bind="text: camera.cameraLabel"></h4>
+								<img data-bind="attr: {src: camera.imageURL}"/>
 							</a>
 							</div>
 						</script>
 					</div>
 
-
+<!--
 					<div class="col-md-4">
 						<a href="#">
 							<span data-bind=>5th Ave S & S Dearborn St</span><br/>
@@ -75,10 +75,10 @@
 							<img src="http://www.seattle.gov/trafficcams/images/4thave_i90.jpg"/>
 						</a>
 					</div>
-
+-->
 			</div>
 
--->
+
 
 
 		<footer>
