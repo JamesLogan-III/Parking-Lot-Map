@@ -178,6 +178,8 @@
 				self.lotList.push(new Lot(lot, self));
 			});
 
+			self.currentLot(self.lotList()[0]);
+
 			// if no markers have been shown, show them
 			if (!self.markersLoaded) {
 				self.showMarkers();
