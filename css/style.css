@@ -194,6 +194,30 @@ article {
 }
 
 
+.cameraImage {
+	height: 260px;
+	width: 320px;
+	margin: 10px;
+}
+
+
+.center {
+	text-align: center;
+}
+
+
+.cameraBox {
+	border-radius: 10px;
+	margin: 10px;
+   border: 3px solid #FF9C00;
+   border-bottom: 5px solid #FF9C00;
+   opacity: 1;
+   overflow: auto;
+   background-color: #ffffff;
+   box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+}
+
+
 footer {
 	border-bottom: 20px solid #4D4D4D;
 	background-color: #FF9C00;
