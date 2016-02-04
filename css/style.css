@@ -26,8 +26,8 @@ header,
 }
 
 article {
-	min-height: 805px;
-	max-height: 805px;
+	min-height: 755px;
+	max-height: 755px;
 }
 
 
@@ -133,7 +133,7 @@ article {
 
 
 #map {
-	height: 100%;
+	height: 753px;
 	width: 100%;
 	z-index: 1;
 	position: absolute;
@@ -159,16 +159,16 @@ article {
 	position: absolute;
 	z-index: 3;
 	top: 125px;
-	height: 833px;
-	min-height: 833px;
+	height: 753px;
+	min-height: 753px;
 	right: 0px;
 }
 
 
 #search-nav {
 	width: 300px;
-	min-height: 827px;
-	max-height: 827px;
+	min-height: 747px;
+	max-height: 747px;
 	padding: 0 5px;
 	background-color: #ffffff;
 	overflow: hidden;
@@ -176,8 +176,8 @@ article {
 
 
 #scroller {
-	min-height: 833px;
-	max-height: 833px;
+	min-height: 753px;
+	max-height: 753px;
 	overflow: auto;
 	margin: 5px;
 }

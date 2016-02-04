@@ -47,17 +47,18 @@
 				</div>
 			</div>
 		</article>
-			<div class="row">
+		<div class="container clearfix">
+			<div class="row clearfix">
 				<h3>Nearby Traffic Cameras</h3>
 					<div data-bind="template: { name: 'camera' , foreach: currentLot().camerasList, as: 'camera' }"></div>
 						<script type="text/html" id="camera">
-							<div class="col-sm-3 cameraBox">
+							<div class="col-lg-4 cameraBox">
 								<h4 class="bulletLabel center" data-bind="text: camera.cameraLabel"></h4>
-								<img class="cameraImage center" data-bind="attr: {src: camera.imageURL}"/>
+								<img class="cameraImage center img-responsive" data-bind="attr: {src: camera.imageURL}"/>
 							</div>
 						</script>
 			</div>
-
+		</div>
 <!--
 					<div class="col-md-4">
 						<a href="#">
