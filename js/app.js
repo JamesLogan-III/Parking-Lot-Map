@@ -249,12 +249,6 @@
 		 }
 	});
 
-	// redraw the markers on filter field Keyup
-	// TODO swap this jQuery for a knockout binding
-	$("input").keyup(function() {
-	    vm.showMarkers();
-	});
-
 	// Initialize map on page load
 	google.maps.event.addDomListener(window, 'load', googleMap.initMap(vm));
 
