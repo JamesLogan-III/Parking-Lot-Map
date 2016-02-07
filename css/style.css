@@ -20,6 +20,10 @@ header,
 	border-color: #4D4D4D;
 }
 
+.navbar-collapse {
+	padding-right: 0px;
+}
+
 
 .navbar-inverse .navbar-toggle .icon-bar {
 	background-color: #FF9C00;
@@ -133,7 +137,7 @@ article {
 
 
 #map {
-	height: 753px;
+	height: 733px;
 	width: 100%;
 	z-index: 1;
 	position: absolute;
@@ -158,17 +162,17 @@ article {
 	opacity: .8;
 	position: absolute;
 	z-index: 3;
-	top: 125px;
-	height: 753px;
-	min-height: 753px;
+	top: 120px;
+	height: 653px;
+	min-height: 653px;
 	right: 0px;
 }
 
 
 #search-nav {
 	width: 300px;
-	min-height: 747px;
-	max-height: 747px;
+	min-height: 647px;
+	max-height: 647px;
 	padding: 0 5px;
 	background-color: #ffffff;
 	overflow: hidden;
@@ -193,11 +197,21 @@ article {
 	color: #FF9C00;
 }
 
+.h4 {
+	font-size: 12px;
+}
+
+.row {
+	padding: 0px;
+	margin: 0px;
+}
+
 
 .cameraImage {
 	height: 260px;
 	width: 320px;
-	margin: 10px;
+	margin-bottom: 10px;
+	display: inline;
 }
 
 
@@ -208,9 +222,8 @@ article {
 
 .cameraBox {
 	border-radius: 10px;
-	margin: 10px;
+	margin: 3px;
    border: 3px solid #FF9C00;
-   border-bottom: 5px solid #FF9C00;
    opacity: 1;
    overflow: auto;
    background-color: #ffffff;
@@ -242,6 +255,12 @@ footer p a:visited {
 	color: #4D4D4D;
 }
 
+
+@media (min-width: 1200px) {
+	.col-lg-3 {
+    	width: 23%;
+	}
+}
 
 @media screen and (max-width: 680px) {
     #search-nav {

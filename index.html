@@ -52,9 +52,11 @@
 				<h3 data-bind="visible: currentLot().camerasList().length > 0">Nearby Traffic Cameras</h3>
 					<div data-bind="template: { name: 'camera' , foreach: currentLot().camerasList, as: 'camera' }"></div>
 						<script type="text/html" id="camera">
-							<div class="col-lg-3 col-lg-12 cameraBox">
-								<h4 class="bulletLabel center" data-bind="text: camera.cameraLabel"></h4>
-								<img class="cameraImage center img-responsive" data-bind="attr: {src: camera.imageURL}"/>
+							<div class="col-lg-3 col-xs-12 cameraBox">
+								<div class="center">
+									<h4 class="bulletLabel h4" data-bind="text: camera.cameraLabel"></h4>
+									<img class="cameraImage img-responsive" data-bind="attr: {src: camera.imageURL}"/>
+								</div>
 							</div>
 						</script>
 			</div>
