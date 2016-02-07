@@ -49,35 +49,23 @@
 		</article>
 		<div class="container clearfix">
 			<div class="row clearfix">
-				<h3>Nearby Traffic Cameras</h3>
+				<h3 data-bind="visible: currentLot().camerasList().length > 0">Nearby Traffic Cameras</h3>
 					<div data-bind="template: { name: 'camera' , foreach: currentLot().camerasList, as: 'camera' }"></div>
 						<script type="text/html" id="camera">
-							<div class="col-lg-4 cameraBox">
+							<div class="col-lg-3 col-lg-12 cameraBox">
 								<h4 class="bulletLabel center" data-bind="text: camera.cameraLabel"></h4>
 								<img class="cameraImage center img-responsive" data-bind="attr: {src: camera.imageURL}"/>
 							</div>
 						</script>
 			</div>
+			<div class="row clearfix" data-bind="visible: currentLot().hasNoCams">
+				<hr>
+				<h3>There are no Traffic cameras within 500 Meters of this lot -
+					<span data-bind="text: currentLot().name()"></span>
+	            </h3>
+			</div>
+
 		</div>
-<!--
-					<div class="col-md-4">
-						<a href="#">
-							<span data-bind=>5th Ave S & S Dearborn St</span><br/>
-							<img src="http://www.seattle.gov/trafficcams/images/5_Dearborn.jpg"/>
-						</a>
-					</div>
-					<div class="col-md-4">
-						<a href="http://www.seattle.gov/trafficcams/4thave_i90.htm">
-							<span>4th Ave S @ I-90 TD</span><br/>
-							<img src="http://www.seattle.gov/trafficcams/images/4thave_i90.jpg"/>
-						</a>
-					</div>
--->
-
-
-
-
-
 		<footer>
 			<p>International Parking Management | 505 5th Avenue South, Suite P1 Seattle, WA 98104 | P: 206.254.0811 | E: <a href="mailto:Info@IPMSeattle.com">Info@IPMSeattle.com</a></p>
 		</footer>

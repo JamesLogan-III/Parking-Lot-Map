@@ -12,7 +12,7 @@
 	// Washington DOT traffic Cameras
 	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
 	var gettingTrafficCameraData = false;
-
+	var dataErrors = ([]);
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
@@ -72,6 +72,7 @@
 		this.events = ko.observable(lotData.events);
 		this.notes = ko.observable(lotData.notes);
 		this.camerasList = ko.observableArray([]);
+		this.hasNoCams = ko.observable();
 		this.show = true;
 
 		this.lotInfo = '';
@@ -130,32 +131,35 @@
 
 	var getTrafficCameras = function(lot) {
 		//alert('lot data ='+ lot.lat() + ' '+lot.long());
-
-		if (!gettingTrafficCameraData) {
+		console.log('CamerasList.length = '+ lot.camerasList().length);
+		// check to see if already getting camera data or have already gotten it for this location
+		if (!gettingTrafficCameraData && lot.camerasList().length === 0) {
 			gettingTrafficCameraData = true;
+			dataErrors = ([]); //empty the error array
 			console.log('gettingTrafficCameraData');
 			$.ajax({
 	          dataType: "json",
 	          url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
 	          success: function(data) {
 	          	var cameras;
-	          	console.log('gettingTrafficCameraData = '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
-	           	console.log('data = '+data);
-	           	console.log('data.length = '+data.length);
-
 	           	if (data.length > 0 ) {
-	           		console.log("Got traffic Cam data");
-	           		cameras = data;
-	           		cameras.forEach(function(camera) {
+					console.log("Got traffic Cam data");
+					lot.hasNoCams(false);
+					cameras = data;
+					cameras.forEach(function(camera) {
 						lot.camerasList.push(new Camera(camera, self));
 					});
+				} else {
+					console.log('No traffic camera data - There are no Traffic cameras within 500 Meters of this lot - ' + lot.name());
+					lot.hasNoCams(true);
+					//("There are no Traffic cameras within 500 Meters of this lot - " + lot.name());
 	           	}
 	            self.gettingTrafficCameraData = false;
 	          },
 	          error: function() {
 	            console.log("Error getting traffic Camera data");
 	            self.gettingTrafficCameraData = false;
-	            //datastatus.errors.push("Error traffic camera data");
+	            self.dataErrors.push("Error Getting traffic camera data, Please check your Internet connection.");
 	          }
 	        });
 		}
@@ -171,6 +175,9 @@
 		self.markersLoaded = false;
 		self.lotList = ko.observableArray([]);
 		self.cameraList = ko.observableArray([]);
+		self.dataErrors =  ko.observableArray([]);
+
+
 
 		self.init = function() {
 			//load lots
