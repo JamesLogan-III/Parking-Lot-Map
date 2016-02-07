@@ -1,4 +1,4 @@
-
+function appInit() {
 	'use strict';
 	var streetViewRoot = 'https://maps.googleapis.com/maps/api/streetview?size=370x150&location=';
 	var streetViewHeading = '&heading=';
@@ -40,10 +40,14 @@
 		infoWindowContent: '',
 		initMap: function(vm) {
 			googleMap.map = new google.maps.Map(document.getElementById('map'), googleMap.options);
+
+		}
+		/* initMap: function(vm) {
+			googleMap.map = new google.maps.Map(document.getElementById('map'), googleMap.options);
 			if (vm.initalized && !vm.markersLoaded) {
 				vm.showMarkers();
 			}
-		}
+		}*/
 	};
 
 	// Lot object contains all data from the json file
@@ -128,17 +132,19 @@
 
 	var getTrafficCameras = function(lot) {
 		//alert('lot data ='+ lot.lat() + ' '+lot.long());
-		console.log('CamerasList.length = '+ lot.camerasList().length);
+		console.log('CamerasList.length at start = '+ lot.camerasList().length);
+		console.log('gettingTrafficCameraData at start = '+ gettingTrafficCameraData );
 		// check to see if already getting camera data or have already gotten it for this location
 		if (!gettingTrafficCameraData && lot.camerasList().length === 0) {
 			gettingTrafficCameraData = true;
 			dataErrors = ([]); //empty the error array
-			console.log('gettingTrafficCameraData');
+			console.log('gettingTrafficCameraData = '+ gettingTrafficCameraData );
 			$.ajax({
 	          dataType: "json",
 	          url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
 	          success: function(data) {
 	          	var cameras;
+	          	console.log('gettingTrafficCameraData from '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
 	           	if (data.length > 0 ) {
 					console.log("Got traffic Cam data");
 					lot.hasNoCams(false);
@@ -146,16 +152,19 @@
 					cameras.forEach(function(camera) {
 						lot.camerasList.push(new Camera(camera, self));
 					});
+					console.log('CamerasList.length at end = '+ lot.camerasList().length);
+					gettingTrafficCameraData = false;
 				} else {
 					console.log('No traffic camera data - There are no Traffic cameras within 500 Meters of this lot - ' + lot.name());
 					lot.hasNoCams(true);
+					gettingTrafficCameraData = false;
 					//("There are no Traffic cameras within 500 Meters of this lot - " + lot.name());
 	           	}
-	            self.gettingTrafficCameraData = false;
+	           	gettingTrafficCameraData = false;
 	          },
 	          error: function() {
 	            console.log("Error getting traffic Camera data");
-	            self.gettingTrafficCameraData = false;
+	            gettingTrafficCameraData = false;
 	            self.dataErrors.push("Error Getting traffic camera data, Please check your Internet connection.");
 	          }
 	        });
@@ -177,7 +186,9 @@
 
 
 		self.init = function() {
-			//load lots
+			//load map and lots
+			googleMap.initMap();
+
 			lots.forEach(function(lot) {
 				self.lotList.push(new Lot(lot, self));
 			});
@@ -198,7 +209,8 @@
 			googleMap.infoWindow.open(googleMap.map, lot.lotMarker);
 			googleMap.map.setCenter(lot.lotMarker.getPosition());
 			self.currentLot(lot);
-			console.log('call getTrafficCameras');
+			console.log('currentLot = ' + self.currentLot().name());
+			console.log('call getTrafficCameras for '+ lot.name());
 			// empty the cameraList arry
 			//self.cameraList.removeAll();
 			getTrafficCameras(lot);
@@ -211,6 +223,7 @@
 		self.showMarkers = function() {
 			ko.utils.arrayForEach(self.lotList(), function(lot) {
 				if (lot.show) {
+					console.log('This is the setmap call in the loop for the showmarkers call'+ googleMap.map);
 					lot.lotMarker.setMap(googleMap.map);
 				} else {
 					lot.lotMarker.setMap(null);
@@ -238,19 +251,23 @@
 
 	var vm = new ViewModel();
 
-	$( document ).ready(function() {
+	var loadMap = function () {
 		if (typeof google !== 'undefined') {
+			console.log("LoadMap vm.init");
 			vm.init();
 			ko.applyBindings(vm);
 		} else {
 		   console.log("Error loading Google Maps");
-		   $('.map-canvas').hide();
-		   $('body').prepend('<p class="error-message">There was an error loading Google Maps. Please checkyour internet connection or try again later.</p>');
+		   $('.map').hide();
+		   $('body').prepend('<p class="error">There was an error loading Google Maps. Please check your internet connection or try again later.</p>');
 		 }
-	});
+	};
 
 	// Initialize map on page load
-	google.maps.event.addDomListener(window, 'load', googleMap.initMap(vm));
+	console.log("google.maps.event Line 254");
+	loadMap();
+	//google.maps.event.addDomListener(window, 'load', googleMap.initMap(vm));
+
 
 	// NOTE: the code below is used to manipulate the CSS of the Infowindow object from Google Maps, It has no impact on the use of KnockoutJS for interaction
 
@@ -298,3 +315,4 @@
 			$(this).css({opacity: '1'});
 		});
 	});
+}
