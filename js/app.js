@@ -42,12 +42,6 @@ function appInit() {
 			googleMap.map = new google.maps.Map(document.getElementById('map'), googleMap.options);
 
 		}
-		/* initMap: function(vm) {
-			googleMap.map = new google.maps.Map(document.getElementById('map'), googleMap.options);
-			if (vm.initalized && !vm.markersLoaded) {
-				vm.showMarkers();
-			}
-		}*/
 	};
 
 	// Lot object contains all data from the json file
@@ -81,7 +75,7 @@ function appInit() {
 		this.lotinfoHTML = '<div class="infoWindow"><h4 class="infoWindowTitle">'+ this.name() + '<br/><span>' + this.address()[0] + '</span>';
 		if (this.manager() !== "") this.lotinfoHTML += '<span style="float: right;">Manager:<br />' + this.manager() + '</span>';
 		this.lotinfoHTML += '</h4>';
-		this.lotinfoHTML += '<img src="' + streetViewRoot + this.lat() + ',' + this.long() + streetViewHeading + this.svHeading() +'" />';
+		this.lotinfoHTML += '<img class="img-responsive" src="' + streetViewRoot + this.lat() + ',' + this.long() + streetViewHeading + this.svHeading() +'" />';
 		this.lotinfoHTML += '<strong>Details:</strong><ul>';
 		this.lotinfoHTML += '<li><span class="bulletLabel">Cross Streets:</span> ' + this.crossStreets() + '</li>';
 		if (this.garageHeight() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">Height:</span> ' + this.garageHeight() + '</li>';
@@ -101,7 +95,7 @@ function appInit() {
 		if (this.events() !== "") this.lotinfoHTML += '<li><span class="bulletLabel">' + this.events() + '</span></li>';
 		this.lotinfoHTML += '</ul>';
 		if (this.notes() !== "") this.lotinfoHTML += '<strong>Notes:</strong> <p>' + this.notes() + '</p>';
-		this.lotinfoHTML += '<div class="iw-bottom-gradient"></div></div>';
+		this.lotinfoHTML += '<br /><div class="iw-bottom-gradient"></div></div>';
 		this.lotinfoHTML = ko.observable(this.lotinfoHTML);
 
 		// Is loaded flag
@@ -131,43 +125,37 @@ function appInit() {
 	};
 
 	var getTrafficCameras = function(lot) {
-		//alert('lot data ='+ lot.lat() + ' '+lot.long());
-		console.log('CamerasList.length at start = '+ lot.camerasList().length);
-		console.log('gettingTrafficCameraData at start = '+ gettingTrafficCameraData );
 		// check to see if already getting camera data or have already gotten it for this location
 		if (!gettingTrafficCameraData && lot.camerasList().length === 0) {
 			gettingTrafficCameraData = true;
 			dataErrors = ([]); //empty the error array
-			console.log('gettingTrafficCameraData = '+ gettingTrafficCameraData );
 			$.ajax({
-	          dataType: "json",
-	          url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
-	          success: function(data) {
-	          	var cameras;
-	          	console.log('gettingTrafficCameraData from '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
-	           	if (data.length > 0 ) {
-					console.log("Got traffic Cam data");
-					lot.hasNoCams(false);
-					cameras = data;
-					cameras.forEach(function(camera) {
+				dataType: "json",
+				url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
+				success: function(data) {
+					var cameras;
+					console.log('gettingTrafficCameraData from '+sdotRoot + lot.lat() + space + lot.long() + ',%20500)');
+					if (data.length > 0 ) {
+						console.log("Got traffic Cam data");
+						lot.hasNoCams(false);
+						cameras = data;
+						cameras.forEach(function(camera) {
 						lot.camerasList.push(new Camera(camera, self));
 					});
-					console.log('CamerasList.length at end = '+ lot.camerasList().length);
 					gettingTrafficCameraData = false;
-				} else {
-					console.log('No traffic camera data - There are no Traffic cameras within 500 Meters of this lot - ' + lot.name());
-					lot.hasNoCams(true);
+					} else {
+						console.log('No traffic camera data - There are no Traffic cameras within 500 Meters of this lot - ' + lot.name());
+						lot.hasNoCams(true);
+						gettingTrafficCameraData = false;
+					}
+				gettingTrafficCameraData = false;
+			},
+				error: function() {
+					console.log("Error getting traffic Camera data");
 					gettingTrafficCameraData = false;
-					//("There are no Traffic cameras within 500 Meters of this lot - " + lot.name());
-	           	}
-	           	gettingTrafficCameraData = false;
-	          },
-	          error: function() {
-	            console.log("Error getting traffic Camera data");
-	            gettingTrafficCameraData = false;
-	            self.dataErrors.push("Error Getting traffic camera data, Please check your Internet connection.");
-	          }
-	        });
+					self.dataErrors.push("Error Getting traffic camera data, Please check your Internet connection.");
+				}
+			});
 		}
 	};
 
@@ -203,16 +191,16 @@ function appInit() {
 		};
 
 		self.showLot = function(lot) {
-			//set content of infoWindow, show it and center the map, make it bounce for 2 seconds, set the current lot and request traffic cameras
+			//set content of infoWindow, show it and center, then offset the map, make the icon bounce for 2 seconds, set the current lot and request traffic cameras
+			var span = googleMap.map.getBounds().toSpan(); // a latLng - # of deg map spans used to compute the offset for the bottom of the map
+			var newLat = lot.lat() + span.lat()*0.45; // sets the marker at the bottom so the window is readable
+			var newLong = lot.long() + span.lng()*0.45; //offset leaves room for the zoom controls
+
 			googleMap.infoWindow.setContent(lot.lotinfoHTML());
 			lot.lotMarker.setAnimation(google.maps.Animation.BOUNCE);
 			googleMap.infoWindow.open(googleMap.map, lot.lotMarker);
-			googleMap.map.setCenter(lot.lotMarker.getPosition());
+			googleMap.map.setCenter(new google.maps.LatLng(newLat, newLong));
 			self.currentLot(lot);
-			console.log('currentLot = ' + self.currentLot().name());
-			console.log('call getTrafficCameras for '+ lot.name());
-			// empty the cameraList arry
-			//self.cameraList.removeAll();
 			getTrafficCameras(lot);
 
 			window.setTimeout(function() {
@@ -223,7 +211,6 @@ function appInit() {
 		self.showMarkers = function() {
 			ko.utils.arrayForEach(self.lotList(), function(lot) {
 				if (lot.show) {
-					console.log('This is the setmap call in the loop for the showmarkers call'+ googleMap.map);
 					lot.lotMarker.setMap(googleMap.map);
 				} else {
 					lot.lotMarker.setMap(null);
@@ -257,17 +244,14 @@ function appInit() {
 			vm.init();
 			ko.applyBindings(vm);
 		} else {
-		   console.log("Error loading Google Maps");
-		   $('.map').hide();
-		   $('body').prepend('<p class="error">There was an error loading Google Maps. Please check your internet connection or try again later.</p>');
+			console.log("Error loading Google Maps");
+			$('.map').hide();
+			$('body').prepend('<p class="error">There was an error loading Google Maps. Please check your internet connection or try again later.</p>');
 		 }
 	};
 
-	// Initialize map on page load
-	console.log("google.maps.event Line 254");
+	// Initialize map
 	loadMap();
-	//google.maps.event.addDomListener(window, 'load', googleMap.initMap(vm));
-
 
 	// NOTE: the code below is used to manipulate the CSS of the Infowindow object from Google Maps, It has no impact on the use of KnockoutJS for interaction
 
@@ -297,6 +281,8 @@ function appInit() {
 
 		// Apply the desired effect to the close button
 		iwCloseBtn.css({
+			width: '27px',
+			height: '27px',
 			opacity: '1', // by default the close button has an opacity of 0.7
 			right: '12px', top: '3px', // button repositioning
 			border: '7px solid #FF9C00', // increasing button border and new color
@@ -305,7 +291,7 @@ function appInit() {
 		});
 
 		// If the content of infowindow not exceed the set maximum height, then the gradient is removed.
-		if($('.infoWindow').height() < 640){
+		if($('.infoWindow').height() < 370){
 			$('.iw-bottom-gradient').css({display: 'none'});
 		}
 
