@@ -6,10 +6,10 @@ function appInit() {
 
 	// URL pattern : https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%2047.597520,%20-122.328885,%20500)
 	// Washington DOT traffic Cameras
-	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
+	var sdotRoot = 'https://data..gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
 	var	space = ',%20';
 	var gettingTrafficCameraData = false;
-	var dataErrors = ([]);
+	var dataErrors = [];
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
@@ -44,7 +44,7 @@ function appInit() {
 		}
 	};
 
-	// Lot object contains all data from the json file
+	// Lot class contains all data from the json file
 	var Lot = function(lotData, parent) {
 		this.id = ko.observable(lotData.id);
 		this.name = ko.observable(lotData.lotName);
@@ -124,11 +124,15 @@ function appInit() {
 
 	};
 
+	var dataError = function(error, parent) {
+		this.errorMessage = ko.observable(error.errorMessage);
+	};
+
 	var getTrafficCameras = function(lot) {
 		// check to see if already getting camera data or have already gotten it for this location
 		if (!gettingTrafficCameraData && lot.camerasList().length === 0) {
 			gettingTrafficCameraData = true;
-			dataErrors = ([]); //empty the error array
+			//dataErrors = ([]); //empty the error array
 			$.ajax({
 				dataType: "json",
 				url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
@@ -153,7 +157,10 @@ function appInit() {
 				error: function() {
 					console.log("Error getting traffic Camera data");
 					gettingTrafficCameraData = false;
-					self.dataErrors.push("Error Getting traffic camera data, Please check your Internet connection.");
+					dataErrors.push(new dataError(
+						{'errorMessage' : 'Error Getting traffic camera data, Please check your Internet connection.'}, self));
+					console.log("dataErrors =" + dataErrors);
+					console.log("dataErrors =" + dataErrors.length);
 				}
 			});
 		}
@@ -181,6 +188,7 @@ function appInit() {
 				self.lotList.push(new Lot(lot, self));
 			});
 
+
 			self.currentLot(self.lotList()[0]);
 
 			// if no markers have been shown, show them
@@ -202,6 +210,10 @@ function appInit() {
 			googleMap.map.setCenter(new google.maps.LatLng(newLat, newLong));
 			self.currentLot(lot);
 			getTrafficCameras(lot);
+
+			dataErrors.forEach(function(error) {
+				self.dataErrors.push(error, self);
+			});
 
 			window.setTimeout(function() {
 				lot.lotMarker.setAnimation(null);

@@ -67,6 +67,14 @@
 				</h3>
 			</div>
 
+			<div class="row clearfix" data-bind="visible: dataErrors().length > 0">
+				<h3 data-bind="template: { name: 'error' , foreach: dataErrors(), as: 'error' }"></h3>
+						<script type="text/html" id="error">
+							There is an error getting the Camera Information, <br/>
+							<span data-bind="text: error.errorMessage"></span>
+						</script>
+			</div>
+
 		</div>
 		<footer>
 			<p>International Parking Management | 505 5th Avenue South, Suite P1 Seattle, WA 98104 | P: 206.254.0811 | E: <a href="mailto:Info@IPMSeattle.com">Info@IPMSeattle.com</a></p>
