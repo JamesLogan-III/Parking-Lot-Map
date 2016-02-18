@@ -49,6 +49,7 @@ This is map of all IPM Parking venues in the greater Seattle Area with street vi
 * https://developers.google.com/maps/documentation/javascript/
 * https://developers.google.com/maps/documentation/javascript/controls
 * https://builtvisible.com/setting-local-fallback-jquery-served-via-cdn/
+* https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282#onerror
 
 ### ScreenShots
 

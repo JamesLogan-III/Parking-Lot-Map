@@ -6,10 +6,10 @@ function appInit() {
 
 	// URL pattern : https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%2047.597520,%20-122.328885,%20500)
 	// Washington DOT traffic Cameras
-	var sdotRoot = 'https://data..gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
+	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
 	var	space = ',%20';
 	var gettingTrafficCameraData = false;
-	var dataErrors = [];
+	var dataError = false;
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
@@ -124,15 +124,10 @@ function appInit() {
 
 	};
 
-	var dataError = function(error, parent) {
-		this.errorMessage = ko.observable(error.errorMessage);
-	};
-
 	var getTrafficCameras = function(lot) {
 		// check to see if already getting camera data or have already gotten it for this location
 		if (!gettingTrafficCameraData && lot.camerasList().length === 0) {
 			gettingTrafficCameraData = true;
-			//dataErrors = ([]); //empty the error array
 			$.ajax({
 				dataType: "json",
 				url: sdotRoot + lot.lat() + space + lot.long() + ',%20500)',
@@ -156,11 +151,8 @@ function appInit() {
 			},
 				error: function() {
 					console.log("Error getting traffic Camera data");
+					dataError = true;
 					gettingTrafficCameraData = false;
-					dataErrors.push(new dataError(
-						{'errorMessage' : 'Error Getting traffic camera data, Please check your Internet connection.'}, self));
-					console.log("dataErrors =" + dataErrors);
-					console.log("dataErrors =" + dataErrors.length);
 				}
 			});
 		}
@@ -176,9 +168,8 @@ function appInit() {
 		self.markersLoaded = false;
 		self.lotList = ko.observableArray([]);
 		self.cameraList = ko.observableArray([]);
-		self.dataErrors =  ko.observableArray([]);
-
-
+		self.dataError =  ko.observable(false);
+		self.details = ko.observable();
 
 		self.init = function() {
 			//load map and lots
@@ -187,7 +178,6 @@ function appInit() {
 			lots.forEach(function(lot) {
 				self.lotList.push(new Lot(lot, self));
 			});
-
 
 			self.currentLot(self.lotList()[0]);
 
@@ -210,10 +200,7 @@ function appInit() {
 			googleMap.map.setCenter(new google.maps.LatLng(newLat, newLong));
 			self.currentLot(lot);
 			getTrafficCameras(lot);
-
-			dataErrors.forEach(function(error) {
-				self.dataErrors.push(error, self);
-			});
+			self.dataError(dataError);
 
 			window.setTimeout(function() {
 				lot.lotMarker.setAnimation(null);
@@ -257,8 +244,8 @@ function appInit() {
 			ko.applyBindings(vm);
 		} else {
 			console.log("Error loading Google Maps");
-			$('.map').hide();
-			$('body').prepend('<p class="error">There was an error loading Google Maps. Please check your internet connection or try again later.</p>');
+			//$('.map').hide();
+			//$('body').prepend('<p class="error">There was an error loading Google Maps. Please check your internet connection or try again later.</p>');
 		 }
 	};
 
