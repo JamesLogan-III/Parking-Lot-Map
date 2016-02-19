@@ -9,7 +9,7 @@ function appInit() {
 	var sdotRoot = 'https://data.seattle.gov/resource/9wcw-sztr.json?$where=within_circle(location,%20';
 	var	space = ',%20';
 	var gettingTrafficCameraData = false;
-	var dataError = false;
+	//var dataError = false;
 
 	// draw the map on the page create infoWindow, add initMap function to load map and place Markers
 	var googleMap = {
@@ -68,6 +68,7 @@ function appInit() {
 		this.notes = ko.observable(lotData.notes);
 		this.camerasList = ko.observableArray([]);
 		this.hasNoCams = ko.observable();
+		this.dataError = ko.observable();
 		this.show = true;
 
 		this.lotInfo = '';
@@ -151,7 +152,7 @@ function appInit() {
 			},
 				error: function() {
 					console.log("Error getting traffic Camera data");
-					dataError = true;
+					lot.dataError(true);
 					gettingTrafficCameraData = false;
 				}
 			});
@@ -200,7 +201,7 @@ function appInit() {
 			googleMap.map.setCenter(new google.maps.LatLng(newLat, newLong));
 			self.currentLot(lot);
 			getTrafficCameras(lot);
-			self.dataError(dataError);
+
 
 			window.setTimeout(function() {
 				lot.lotMarker.setAnimation(null);

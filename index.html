@@ -67,7 +67,7 @@
 					<span data-bind="text: currentLot().name()"></span> lot.
 				</h3>
 			</div>
-			<div class="row clearfix" data-bind="visible: dataError()">
+			<div class="row clearfix" data-bind="visible: currentLot().dataError()">
 				<h3>Error Getting traffic camera data, Please check your Internet connection
 					<span data-bind="text: currentLot().name()"></span>.
 				</h3>
@@ -86,12 +86,9 @@
 		<script src="js/lots.js"></script>
 		<script src="js/app.js"></script>
 		<script>
-		function googleError() {
-			var viewModel = {
-				details: ko.observable() // Initially blank
-			};
-			viewModel.details("<h2>Error loading Google Maps, please check your internet connection.</h2>");
-		}
+			function googleError() {
+				alert("Error loading Google Maps, please check your internet connection.");
+			}
 		</script>
 		<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTva_fKidJdfJRqgbkx6M4Isx4rm6L-KQ&v=3.20&callback=appInit" onerror="googleError()"></script>
 	</body>
