@@ -219,16 +219,18 @@ function appInit() {
 			self.markersLoaded = true;
 		};
 
+		var filter;
 		// a second KO array to handle searches
 		self.filterLots = ko.computed(function(){
-			var filter = self.searchFilter().toLowerCase();
+			filter = self.searchFilter().toLowerCase();
 			return ko.utils.arrayFilter(self.lotList(), function(lot){
 				if (lot.name().toLowerCase().indexOf(filter) >= 0) {
-					lot.show = true;
+					lot.lotMarker.setVisible(true);
 					return lot.visible(true);
 				} else {
 					lot.show = false;
-					self.showMarkers();
+					lot.lotMarker.setVisible(false);
+					//self.showMarkers();
 					return lot.visible(false);
 				}
 			});
